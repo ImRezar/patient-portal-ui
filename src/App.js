@@ -1,5 +1,12 @@
 // src/App.js
 import React, { useState } from "react";
+import {
+  FaUser,
+  FaIdBadge,
+  FaMicrophone,
+  FaImage,
+  FaClipboardList,
+} from "react-icons/fa";
 import "./App.css";
 
 function App() {
@@ -23,12 +30,14 @@ function App() {
     setLoading(true);
     setSummary("");
 
+    // Build JSON payload
     const jsonPayload = {
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       nationalCode: nationalCode.trim(),
     };
 
+    // Build multipart form-data
     const formData = new FormData();
     formData.append("json", JSON.stringify(jsonPayload));
     if (audioFile) formData.append("audio", audioFile);
@@ -52,59 +61,74 @@ function App() {
   return (
     <div className="container">
       <h1>Patient Portal</h1>
-      <form onSubmit={handleSubmit} className="form">
-        <label>
-          First Name
-          <input
-            type="text"
-            value={firstName}
-            onChange={(e) => setFirstName(e.target.value)}
-            placeholder="John"
-          />
-        </label>
-        <label>
-          Last Name
-          <input
-            type="text"
-            value={lastName}
-            onChange={(e) => setLastName(e.target.value)}
-            placeholder="Doe"
-          />
-        </label>
-        <label>
-          National Code<span className="required">*</span>
-          <input
-            type="text"
-            value={nationalCode}
-            onChange={(e) => setNationalCode(e.target.value)}
-            placeholder="123456789"
-            required
-          />
-        </label>
-        <label>
-          Audio Upload (optional)
-          <input
-            type="file"
-            accept="audio/*"
-            onChange={(e) => setAudioFile(e.target.files[0] || null)}
-          />
-        </label>
-        <label>
-          Blood Test Image (optional)
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImageFile(e.target.files[0] || null)}
-          />
-        </label>
-        <button type="submit" disabled={loading}>
-          {loading ? "Submitting..." : "Submit"}
-        </button>
-      </form>
+      <div className="grid">
+        <form onSubmit={handleSubmit} className="form">
+          <label>
+            <FaUser className="icon" />
+            First Name
+            <input
+              type="text"
+              value={firstName}
+              onChange={(e) => setFirstName(e.target.value)}
+              placeholder="John"
+            />
+          </label>
 
-      <div className="summary">
-        <h2>Summary</h2>
-        <pre>{summary || "No summary yet."}</pre>
+          <label>
+            <FaUser className="icon" />
+            Last Name
+            <input
+              type="text"
+              value={lastName}
+              onChange={(e) => setLastName(e.target.value)}
+              placeholder="Doe"
+            />
+          </label>
+
+          <label>
+            <FaIdBadge className="icon" />
+            National Code<span className="required">*</span>
+            <input
+              type="text"
+              value={nationalCode}
+              onChange={(e) => setNationalCode(e.target.value)}
+              placeholder="123456789"
+              required
+            />
+          </label>
+
+          <label>
+            <FaMicrophone className="icon" />
+            Audio Upload (optional)
+            <input
+              type="file"
+              accept="audio/*"
+              onChange={(e) => setAudioFile(e.target.files[0] || null)}
+            />
+          </label>
+
+          <label>
+            <FaImage className="icon" />
+            Blood Test Image (optional)
+            <input
+              type="file"
+              accept="image/*"
+              onChange={(e) => setImageFile(e.target.files[0] || null)}
+            />
+          </label>
+
+          <button type="submit" disabled={loading}>
+            {loading ? "Submitting..." : "Submit"}
+          </button>
+        </form>
+
+        <div className="summary">
+          <h2>
+            <FaClipboardList className="icon" />
+            Summary from Workflow
+          </h2>
+          <pre>{summary || "No summary yet."}</pre>
+        </div>
       </div>
     </div>
   );
