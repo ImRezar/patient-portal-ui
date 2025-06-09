@@ -1,60 +1,89 @@
 /* src/App.css */
-
-/* Container for the entire form */
-.app-container {
-  max-width: 700px;
-  margin: 40px auto;
-  font-family: sans-serif;
+body {
+  margin: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f5f7fa;
+  color: #333;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding: 2rem;
 }
 
-/* Each panel box */
-.panel {
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  padding: 20px;
-  margin-bottom: 24px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-}
-
-/* Panel header titles */
-.panel h2 {
-  margin-top: 0;
-  font-size: 1.2rem;
-  margin-bottom: 12px;
-}
-
-/* Input fields */
-.panel input[type="text"],
-.panel input[type="file"] {
+.container {
+  background: #ffffff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
   width: 100%;
-  padding: 8px 10px;
-  margin-bottom: 12px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+  max-width: 600px;
+  box-sizing: border-box;
+  transition: all 0.3s ease-in-out;
 }
 
-/* Buttons */
+h1 {
+  font-size: 2rem;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #2a5d9f;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  color: #555;
+}
+
+input[type="text"],
+input[type="file"] {
+  margin-top: 0.5rem;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: border 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="file"]:focus {
+  outline: none;
+  border-color: #2a5d9f;
+}
+
 button {
-  background-color: #6e00ff;
+  padding: 0.8rem;
+  font-size: 1rem;
+  background-color: #2a5d9f;
   color: white;
   border: none;
-  padding: 10px 16px;
-  border-radius: 4px;
-  font-size: 1rem;
+  border-radius: 8px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+button:hover {
+  background-color: #1d4170;
 }
 
-/* Summary area styling */
-.summary-box {
-  border: 1px dashed #888;
-  border-radius: 6px;
-  padding: 20px;
-  min-height: 80px;
-  background-color: #f9f9f9;
-  white-space: pre-wrap; /* preserves newlines */
+.summary {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #e9f1fb;
+  border-left: 5px solid #2a5d9f;
+  border-radius: 8px;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+.required {
+  color: red;
+  margin-left: 0.25rem;
 }

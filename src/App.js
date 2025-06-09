@@ -1,154 +1,112 @@
 // src/App.js
 import React, { useState } from "react";
-import axios from "axios";
 import "./App.css";
 
 function App() {
-  // State hooks
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [nationalCode, setNationalCode] = useState("");
   const [audioFile, setAudioFile] = useState(null);
-  const [bloodTestFile, setBloodTestFile] = useState(null);
-
+  const [imageFile, setImageFile] = useState(null);
+  const [summary, setSummary] = useState("");
   const [loading, setLoading] = useState(false);
-  const [summaryText, setSummaryText] = useState("");
 
-  // Replace this with your actual webhook URL
-  const WEBHOOK_URL = "https://example.com/your-workflow-webhook";
+  // 🔗 PUT YOUR REAL n8n WEBHOOK URL HERE:
+  const WEBHOOK_URL = "https://mrezar.app.n8n.cloud/webhook-test/patient-portal-ui";
 
-  // Handler for form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!nationalCode.trim()) {
       alert("National Code is required.");
       return;
     }
-
     setLoading(true);
-    setSummaryText(""); // clear any previous summary
+    setSummary("");
 
-    // Build multipart form data
+    // 1) Build the JSON payload for text fields
+    const jsonPayload = {
+      firstName: firstName.trim(),
+      lastName: lastName.trim(),
+      nationalCode: nationalCode.trim(),
+    };
+
+    // 2) Pack into multipart FormData
     const formData = new FormData();
-    formData.append("nationalCode", nationalCode.trim());
-
-    if (firstName.trim()) {
-      formData.append("firstName", firstName.trim());
-    }
-    if (lastName.trim()) {
-      formData.append("lastName", lastName.trim());
-    }
-    if (audioFile) {
-      formData.append("audio", audioFile);
-    }
-    if (bloodTestFile) {
-      formData.append("bloodTestImage", bloodTestFile);
-    }
+    formData.append("json", JSON.stringify(jsonPayload));
+    if (audioFile) formData.append("audio", audioFile);
+    if (imageFile) formData.append("image", imageFile);
 
     try {
-      const response = await axios.post(WEBHOOK_URL, formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
+      const response = await fetch(WEBHOOK_URL, {
+        method: "POST",
+        body: formData,
       });
-
-      // Assuming the workflow returns JSON like { summary: "..." }
-      if (response.data && response.data.summary) {
-        setSummaryText(response.data.summary);
-      } else {
-        setSummaryText(
-          "⚠️ Unexpected response format. Please check your webhook."
-        );
-      }
+      const data = await response.json();
+      setSummary(data.summary || JSON.stringify(data));
     } catch (err) {
-      console.error(err);
-      setSummaryText(
-        "❌ Error calling the workflow. See console for details."
-      );
+      console.error("Submission error:", err);
+      setSummary("❌ Submission failed. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div className="app-container">
-      <h1>Medical Dashboard</h1>
-      <form onSubmit={handleSubmit}>
-        {/* 1) Audio Upload Panel */}
-        <div className="panel">
-          <h2>Audio Upload (optional)</h2>
+    <div className="container">
+      <h1>Patient Portal</h1>
+      <form onSubmit={handleSubmit} className="form">
+        <label>
+          First Name
+          <input
+            type="text"
+            value={firstName}
+            onChange={e => setFirstName(e.target.value)}
+            placeholder="John"
+          />
+        </label>
+        <label>
+          Last Name
+          <input
+            type="text"
+            value={lastName}
+            onChange={e => setLastName(e.target.value)}
+            placeholder="Doe"
+          />
+        </label>
+        <label>
+          National Code<span className="required">*</span>
+          <input
+            type="text"
+            value={nationalCode}
+            onChange={e => setNationalCode(e.target.value)}
+            placeholder="123456789"
+            required
+          />
+        </label>
+        <label>
+          Audio Upload (optional)
           <input
             type="file"
             accept="audio/*"
-            onChange={(e) =>
-              setAudioFile(e.target.files.length ? e.target.files[0] : null)
-            }
+            onChange={e => setAudioFile(e.target.files[0] || null)}
           />
-          {audioFile && <p>Selected: {audioFile.name}</p>}
-        </div>
-
-        {/* 2) Blood Test (Image) Upload Panel */}
-        <div className="panel">
-          <h2>Blood Test Upload (optional)</h2>
+        </label>
+        <label>
+          Blood Test Image (optional)
           <input
             type="file"
             accept="image/*"
-            onChange={(e) =>
-              setBloodTestFile(
-                e.target.files.length ? e.target.files[0] : null
-              )
-            }
+            onChange={e => setImageFile(e.target.files[0] || null)}
           />
-          {bloodTestFile && <p>Selected: {bloodTestFile.name}</p>}
-        </div>
-
-        {/* 3) Patient Info Panel */}
-        <div className="panel">
-          <h2>Patient Information</h2>
-
-          <label>
-            First Name:
-            <input
-              type="text"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              placeholder="Enter first name"
-            />
-          </label>
-
-          <label>
-            Last Name:
-            <input
-              type="text"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              placeholder="Enter last name"
-            />
-          </label>
-
-          <label>
-            National Code: <span style={{ color: "red" }}>*</span>
-            <input
-              type="text"
-              value={nationalCode}
-              onChange={(e) => setNationalCode(e.target.value)}
-              placeholder="Enter national code (required)"
-            />
-          </label>
-
-          <button type="submit" disabled={loading}>
-            {loading ? "Processing…" : "Get Patient Information"}
-          </button>
-        </div>
+        </label>
+        <button type="submit" disabled={loading}>
+          {loading ? "Submitting..." : "Submit"}
+        </button>
       </form>
 
-      {/* 4) Summary Area */}
-      <div className="panel">
+      <div className="summary">
         <h2>Summary from Workflow</h2>
-        <div className="summary-box">
-          {summaryText ? summaryText : "No summary yet."}
-        </div>
+        <pre>{summary || "No summary yet."}</pre>
       </div>
     </div>
   );
