@@ -11,7 +11,7 @@ function App() {
   const [summary, setSummary] = useState("");
   const [loading, setLoading] = useState(false);
 
-  // 🔗 PUT YOUR REAL n8n WEBHOOK URL HERE:
+  // 🔗 YOUR N8N WEBHOOK URL HERE
   const WEBHOOK_URL = "https://mrezar.app.n8n.cloud/webhook-test/patient-portal-ui";
 
   const handleSubmit = async (e) => {
@@ -23,14 +23,12 @@ function App() {
     setLoading(true);
     setSummary("");
 
-    // 1) Build the JSON payload for text fields
     const jsonPayload = {
       firstName: firstName.trim(),
       lastName: lastName.trim(),
       nationalCode: nationalCode.trim(),
     };
 
-    // 2) Pack into multipart FormData
     const formData = new FormData();
     formData.append("json", JSON.stringify(jsonPayload));
     if (audioFile) formData.append("audio", audioFile);
@@ -60,7 +58,7 @@ function App() {
           <input
             type="text"
             value={firstName}
-            onChange={e => setFirstName(e.target.value)}
+            onChange={(e) => setFirstName(e.target.value)}
             placeholder="John"
           />
         </label>
@@ -69,7 +67,7 @@ function App() {
           <input
             type="text"
             value={lastName}
-            onChange={e => setLastName(e.target.value)}
+            onChange={(e) => setLastName(e.target.value)}
             placeholder="Doe"
           />
         </label>
@@ -78,7 +76,7 @@ function App() {
           <input
             type="text"
             value={nationalCode}
-            onChange={e => setNationalCode(e.target.value)}
+            onChange={(e) => setNationalCode(e.target.value)}
             placeholder="123456789"
             required
           />
@@ -88,7 +86,7 @@ function App() {
           <input
             type="file"
             accept="audio/*"
-            onChange={e => setAudioFile(e.target.files[0] || null)}
+            onChange={(e) => setAudioFile(e.target.files[0] || null)}
           />
         </label>
         <label>
@@ -96,7 +94,7 @@ function App() {
           <input
             type="file"
             accept="image/*"
-            onChange={e => setImageFile(e.target.files[0] || null)}
+            onChange={(e) => setImageFile(e.target.files[0] || null)}
           />
         </label>
         <button type="submit" disabled={loading}>
