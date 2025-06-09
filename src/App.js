@@ -103,7 +103,7 @@ function App() {
       </form>
 
       <div className="summary">
-        <h2>Summary from Workflow</h2>
+        <h2>Summary</h2>
         <pre>{summary || "No summary yet."}</pre>
       </div>
     </div>
