@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/patient-portal-ui/static/css/main.9aa73cc1.css",
-    "main.js": "/patient-portal-ui/static/js/main.96b7f81b.js",
+    "main.js": "/patient-portal-ui/static/js/main.19401cbe.js",
     "static/js/453.530570a9.chunk.js": "/patient-portal-ui/static/js/453.530570a9.chunk.js",
     "index.html": "/patient-portal-ui/index.html",
     "main.9aa73cc1.css.map": "/patient-portal-ui/static/css/main.9aa73cc1.css.map",
-    "main.96b7f81b.js.map": "/patient-portal-ui/static/js/main.96b7f81b.js.map",
+    "main.19401cbe.js.map": "/patient-portal-ui/static/js/main.19401cbe.js.map",
     "453.530570a9.chunk.js.map": "/patient-portal-ui/static/js/453.530570a9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9aa73cc1.css",
-    "static/js/main.96b7f81b.js"
+    "static/js/main.19401cbe.js"
   ]
 }
