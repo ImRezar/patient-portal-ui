@@ -23,35 +23,37 @@ function App() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (!nationalCode.trim()) {
       alert("National Code is required.");
       return;
     }
+
     setLoading(true);
     setSummary("");
 
-    // Build JSON payload
-    const jsonPayload = {
-      firstName: firstName.trim(),
-      lastName: lastName.trim(),
-      nationalCode: nationalCode.trim(),
-    };
-
     // Build multipart form-data
     const formData = new FormData();
-    formData.append("json", JSON.stringify(jsonPayload));
-    if (audioFile) formData.append("audio", audioFile);
-    if (imageFile) formData.append("image", imageFile);
+    formData.append("firstName", firstName.trim());
+    formData.append("lastName", lastName.trim());
+    formData.append("nationalCode", nationalCode.trim());
+    if (audioFile) formData.append("audioFile", audioFile);
+    if (imageFile) formData.append("imageFile", imageFile);
 
     try {
       const response = await fetch(WEBHOOK_URL, {
         method: "POST",
         body: formData,
       });
+
+      if (!response.ok) {
+        throw new Error(`Server responded ${response.status}`);
+      }
+
       const data = await response.json();
-      setSummary(data.summary || JSON.stringify(data));
-    } catch (err) {
-      console.error("Submission error:", err);
+      setSummary(data.summary ?? JSON.stringify(data));
+    } catch (error) {
+      console.error("Submission error:", error);
       setSummary("❌ Submission failed. Please try again.");
     } finally {
       setLoading(false);
