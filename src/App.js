@@ -19,7 +19,7 @@ function App() {
   const [loading, setLoading] = useState(false);
 
   // 🔗 YOUR N8N WEBHOOK URL HERE
-  const WEBHOOK_URL = "https://mrezar.app.n8n.cloud/webhook-test/patient-portal-ui";
+  const WEBHOOK_URL = "https://llmagentrial.app.n8n.cloud/webhook-test/patient-portal-ui";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
